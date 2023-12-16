@@ -21,8 +21,3 @@ class Character:
         while points_to_give > 0:
             stats[random.randint(0, len(stats)-1)] += 1
             points_to_give -= 1
-            
-# Dorian = Character()
-# Lei = Character([10, 12, 15, 11, 69, 21, 15])
-# print("Dorian:", Dorian.skill_points)
-# print("Lei:", Lei.skill_points)
