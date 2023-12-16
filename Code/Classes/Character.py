@@ -6,6 +6,7 @@ class Character:
         self.skill_points = dict()
         self.initialize_skill_points(skill_points)
         self.prof = prof
+        self.name = "NotYetNamed"
 
     def initialize_skill_points(self, skill_points):
         Character.random_spliter(skill_points, 10)
@@ -16,14 +17,23 @@ class Character:
         self.skill_points["holiness"] = skill_points[4]
         self.skill_points["charisma"] = skill_points[5]
         self.skill_points["speed"] = skill_points[6]
+
+    def add_skill_points(self, skill_points):
+        self.skill_points["strength"] += skill_points[0]
+        self.skill_points["dexterity"] += skill_points[1]
+        self.skill_points["defense"] += skill_points[2]
+        self.skill_points["magic"] += skill_points[3]
+        self.skill_points["holiness"] += skill_points[4]
+        self.skill_points["charisma"] += skill_points[5]
+        self.skill_points["speed"] += skill_points[6]
         
     def random_spliter(stats, points_to_give):
         while points_to_give > 0:
             stats[random.randint(0, len(stats)-1)] += 1
             points_to_give -= 1
-
-    def get_skill_points(self):
-        return self.skill_points
+    
+    def to_dict(self):
+        return {"prof": self.prof, "skill_points": self.skill_points}
     
 class Arbalist(Character):
     def __init__(self):
