@@ -21,3 +21,6 @@ class Character:
         while points_to_give > 0:
             stats[random.randint(0, len(stats)-1)] += 1
             points_to_give -= 1
+
+    def get_skill_points(self):
+        return self.skill_points
