@@ -1,5 +1,9 @@
 import json
-from ..Classes import Dragoon, Arbalist, Slaughterer, Guardian, Spellcaster, Bard, Seraph
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Classes'))
+
+from Character import Dragoon, Arbalist, Slaughterer, Guardian, Spellcaster, Bard, Seraph
 
 def load_characters():
     try:
@@ -101,4 +105,4 @@ def view_characters(username):
     print("This feature is not yet implemented")
     character_manager(username)
 
-main()
+main("Pixa253lulu")
