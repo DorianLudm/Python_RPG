@@ -37,11 +37,12 @@ Buffs: Resistance to debuff
 Buffs: Movement speed  
 
 ## Classes and associated stats  
-| Class \ Stats | Strength | Agility | Defense | Magic | Holyness | Charisma | Speed |  
+| Class \ Stats | Strength | Agility | Defense | Magic | Holiness | Charisma | Speed |  
 |---------------|----------|---------|---------|-------|----------|----------|-------|  
 | Dragoon       | 12       | 2       | 4       | 2     | 2        | 2        | 1     |  
 | Arbalist      | 6        | 9       | 3       | 3     | 0        | 1        | 3     |  
 | Slaughterer   | 7        | 5       | 1       | 4     | 0        | 3        | 5     |  
 | Guardian      | 4        | 0       | 10      | 1     | 4        | 6        | 0     |  
 | Spellcaster   | 3        | 5       | 1       | 9     | 2        | 1        | 4     |  
-| Angel         | 2        | 2       | 2       | 7     | 7        | 3        | 1     |  
+| Bard          | 4        | 3       | 1       | 5     | 5        | 2        | 4     |  
+| Seraph        | 2        | 2       | 2       | 7     | 7        | 4        | 1     |  
