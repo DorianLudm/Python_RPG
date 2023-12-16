@@ -24,3 +24,31 @@ class Character:
 
     def get_skill_points(self):
         return self.skill_points
+    
+class Arbalist(Character):
+    def __init__(self):
+        super().__init__("Arbalist", [6, 9, 3, 3, 0, 1, 3])
+
+class Bard(Character):
+    def __init__(self):
+        super().__init__("Bard", [4, 3, 1, 5, 5, 2, 4])
+
+class Dragoon(Character):
+    def __init__(self):
+        super().__init__("Dragoon", [12, 2, 4, 2, 2, 2, 1])
+
+class Guardian(Character):
+    def __init__(self):
+        super().__init__("Guardian", [4, 0, 10, 1, 4, 6, 0])
+
+class Seraph(Character):
+    def __init__(self):
+        super().__init__("Seraph", [2, 2, 2, 7, 7, 4, 1])
+
+class Slaughterer(Character):
+    def __init__(self):
+        super().__init__("Slaughterer", [7, 5, 1, 4, 0, 3, 5])
+
+class Spellcaster(Character):
+    def __init__(self):
+        super().__init__("Spellcaster", [3, 5, 1, 9, 2, 1, 4])
