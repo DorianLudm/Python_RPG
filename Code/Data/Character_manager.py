@@ -14,9 +14,13 @@ def load_characters():
     finally:
         f.close()
 
-def has_character(username):
+def is_initialized(username):
     characters = load_characters()
     return username in characters
+
+def owns_character(username):
+    characters = load_characters()
+    return username in characters and len(characters[username]) > 0
 
 def character_name_taken(username, character_name):
     characters = load_characters()
@@ -54,6 +58,12 @@ def add_character(username, character):
     with open('./Code/Data/Characters.json', 'w') as f:
         json.dump(characters, f)
 
+def remove_character(username, character_name):
+    characters = load_characters()
+    del characters[username][character_name]
+    with open('./Code/Data/Characters.json', 'w') as f:
+        json.dump(characters, f)
+
 def manual_skill_points(character):
     print("You have 15 skill points to distribute")
     print("You can distribute them however you want between the following skills")
@@ -71,15 +81,14 @@ def manual_skill_points(character):
         for tuple in repartition:
             tuple = tuple.split(" ")
             tuple = [i for i in tuple if i != ""]
-            print(tuple)
             skill = tuple[0].strip().lower()
             amount = tuple[1].strip()
             if skill in repartition_points and amount.isnumeric():
-                repartition_points[skill] = int(amount)
+                repartition_points[skill] += int(amount)
                 point_given += int(amount)
             else:
                 print("Invalid input")
-                # break
+                break
         if point_given != 15:
             print("You must give exactly 15 points")
         else:
@@ -122,7 +131,7 @@ def character_manager(username):
         character_manager(username)
 
 def create_character(username):
-    if not has_character(username):
+    if not is_initialized(username):
         initialize(username)
     if len(load_characters()[username]) >= 5:
         print("You already have 5 characters, delete one to create a new one")
@@ -177,15 +186,40 @@ def create_character(username):
             add_character(username, character)
 
 def delete_character(username):
-    if not has_character(username):
+    if not owns_character(username):
         print("You don't have any characters yet!")
         character_manager(username)
     else:
+        answers = dict()
         print("Select a character to delete")
-        for i in range(len(load_characters()[username])):
-            print(i+1, ". ", list(load_characters()[username].keys())[i], sep="")
-        print(len(load_characters()[username])+1, ". Go back", sep="")
-    
+        characters = load_characters()[username]
+        for i in range(len(characters)):
+            print(i+1, ". ", list(characters.keys())[i], sep="")
+            answers[str(i+1)] = list(characters.keys())[i]
+        print(len(characters)+1, ". Go back", sep="")
+        choice = input("Choice: ")
+        if choice.isnumeric() and 1 <= int(choice) and int(choice) <= len(characters)+1:
+            if choice == str(len(characters)+1):
+                character_manager(username)
+            else:
+                print("Are you sure you want to delete", answers[choice], "?")
+                print("1. Yes")
+                print("2. No")
+                choice_valid = False
+                while not choice_valid:
+                    choice_validation = input("Choice: ")
+                    if choice_validation == "1":
+                        remove_character(username, answers[choice])
+                        choice_valid = True
+                        print("The character", answers[choice], "has been deleted")
+                        character_manager(username)
+                    elif choice_validation == "2":
+                        choice_valid = True
+                        print("The deletion of", answers[choice], "has been cancelled")
+                        character_manager(username)
+                    else:
+                        print("Invalid choice")
+                        delete_character(username)
 
 def view_characters(username):
     print("This feature is not yet implemented")
