@@ -222,7 +222,27 @@ def delete_character(username):
                         delete_character(username)
 
 def view_characters(username):
-    print("This feature is not yet implemented")
-    character_manager(username)
+    if not owns_character(username):
+        print("You don't have any characters yet!")
+        character_manager(username)
+    else:
+        print("Select a character to view")
+        characters = load_characters()[username]
+        for i in range(len(characters)):
+            print(i+1, ". ", list(characters.keys())[i], sep="")
+        print(len(characters)+1, ". Go back", sep="")
+        choice = input("Choice: ")
+        if choice.isnumeric() and 1 <= int(choice) and int(choice) <= len(characters)+1:
+            if choice == str(len(characters)+1):
+                character_manager(username)
+            else:
+                view_character(username, list(characters.keys())[int(choice)-1])
+
+def view_character(username, name):
+    characters = load_characters()[username]
+    character = characters[name]
+    print("Name:", name)
+    print("Profession:", character["prof"])
+    print("Stats:", character["skill_points"])
 
 main("Pixa253lulu")
