@@ -2,8 +2,11 @@ import json
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Classes'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from Character import Dragoon, Arbalist, Slaughterer, Guardian, Spellcaster, Bard, Seraph
+from Account_manager import account_main
+from commands import clear
 
 def load_characters():
     try:
@@ -72,9 +75,6 @@ def view_character(username, name):
     print("Profession:", character["prof"])
     print("Stats:", character["skill_points"])
 
-def clear():
-    os.system('cls')
-
 def manual_skill_points(character):
     repartition_done = False
     error = []
@@ -115,22 +115,28 @@ def manual_skill_points(character):
     clear()
     print("Your character's skill points are now:", character.skill_points)
 
-def main(username):
+def character_main(player):
+    username = player.username
     clear()
     print("Welcome to Python RPG", username, "!")
     print("What would you like to do?")
     print("1. Play with a character")
     print("2. Manage characters")
+    print("3. Logout")
     choice = input("Choice: ")
     if choice == "1":
-        play(username)
+        play(player)
     elif choice == "2":
-        character_manager(username)
+        character_manager(player)
+    elif choice == "3":
+        player.logout()
+        #account_main() Might need to re-add this??
     else:
         print("Invalid choice")
-        main()
+        character_main()
 
-def character_manager(username):
+def character_manager(player):
+    username = player.username
     clear()
     print("This is the character manager")
     print("What would you like to do?")
@@ -146,7 +152,7 @@ def character_manager(username):
     elif choice == "3":
         view_characters(username)
     elif choice == "4":
-        main(username)
+        character_main(player)
     else:
         print("Invalid choice")
         character_manager(username)
@@ -286,14 +292,15 @@ def view_characters(username):
 
 def play(*args):
     if len(args) == 1:
-        username = args[0]
+        player = args[0]
+        username = player.username
         clear()
         if not owns_character(username):
             clear()
             print("You don't have any characters yet!")
             print("Enter anything to go back")
             input()
-            main(username)
+            character_main(username)
         else:
             print("Select a character to play with")
             characters = load_characters()[username]
@@ -303,20 +310,19 @@ def play(*args):
             choice = input("Choice: ")
             if choice.isnumeric() and 1 <= int(choice) and int(choice) <= len(characters)+1:
                 if choice == str(len(characters)+1):
-                    main(username)
+                    character_main(username)
                 else:
                     print("You are now playing with", list(characters.keys())[int(choice)-1])
                     play(username, list(characters.keys())[int(choice)-1])
     elif len(args) == 2:
-        username = args[0]
+        Player = args[0]
+        username = Player.username
         character_name = args[1]
         print("Welcome to Python RPG", username, "!")
         print("You are playing with", character_name)
         print("Not yet implemented")
         import time
         time.sleep(5)
-        main(username)
+        character_main(username)
     else:
         raise Exception("Invalid number of arguments")
-
-main("Pixa253lulu")
