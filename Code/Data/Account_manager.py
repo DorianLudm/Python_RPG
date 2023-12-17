@@ -1,5 +1,9 @@
 import json
 from getpass import getpass
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from commands import clear
 
 def load_accounts():
     try:
@@ -31,6 +35,7 @@ def match_password(username, password):
 def login():
     retry = True
     while retry:
+        clear()
         username = input('Username: ').strip()
         if not username_exists(username):
             print("This username doesn't exist")
@@ -47,6 +52,7 @@ def login():
 def create_account():
     retry = True
     while retry:
+        clear()
         print('Your username must be between 4 and 16 characters long and can only contain letters, numbers, and underscores.')
         username = input('Username: ').strip()
         if not check_username(username):
@@ -85,26 +91,34 @@ def check_username(username):
 def check_password(password):
     return len(password) >= 4 and len(password) <= 16
 
-def main():
-    print('Welcome to the account manager!')
+def account_main():
+    clear()
+    print('Welcome to PYTHON_RPG!')
     print('Would you like to login or create an account?')
     print('1. Login')
     print('2. Create an account')
+    print('3. Exit')
     choice = input('Choice: ').strip()
     if choice == '1':
         username = login()
         if not username:
             print('Login failed')
         else:
+            clear()
             print('You are logged in as', username)
+            print('Enter anything to continue')
+            input()
+            return username
     elif choice == '2':
         new_account = create_account()
         if not new_account:
             print('Account creation failed')
         else:
             print('You created the account of', new_account)
+    elif choice == '3':
+        clear()
+        print('Goodbye!')
+        sys.exit()
     else:
         print('Invalid choice')
-        main()
-
-main()
+        account_main()
