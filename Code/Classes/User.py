@@ -10,8 +10,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(str)
     salt: Mapped[str] = mapped_column(str)
     hashed_password: Mapped[str] = mapped_column(str)
-    # Might be Mapped[List["Character"]]
-    characters: Mapped[List[Character]] = relationship("Character", back_populates="user")
+    characters: Mapped[List["Character"]] = relationship("Character", back_populates="user")
     
     def __init__(self, username, salt, hashed_password):
         self.logined = False
