@@ -1,6 +1,21 @@
 import random
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import Column, Integer, String, ForeignKey
 
-class Character:
+Base = DeclarativeBase()
+
+class Character(Base):
+    __tablename__ = "characters"
+    idC: Mapped[int] = mapped_column(int, primary_key=True)
+    name: Mapped[str] = mapped_column(str)
+    profession: Mapped[str] = mapped_column(str)
+    strength: Mapped[int] = mapped_column(int)
+    dexterity: Mapped[int] = mapped_column(int)
+    defense: Mapped[int] = mapped_column(int)
+    magic: Mapped[int] = mapped_column(int)
+    holiness: Mapped[int] = mapped_column(int)
+    charisma: Mapped[int] = mapped_column(int)
+    speed: Mapped[int] = mapped_column(int)
     
     def __init__(self, prof = "None", skill_points = [0 for i in range(7)]):
         self.skill_points = dict()
