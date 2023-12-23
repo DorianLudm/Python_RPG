@@ -8,6 +8,7 @@ from Account_manager import account_main
 from Character_manager import character_main
 
 player = User()
+# Add if here
 while True:
     username = account_main()
     if username:
