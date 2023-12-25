@@ -115,8 +115,8 @@ def manual_skill_points(character):
     clear()
     print("Your character's skill points are now:", character.skill_points)
 
-def character_main(player):
-    username = player.username
+def character_main(user):
+    username = user.username
     clear()
     print("Welcome to Python RPG", username, "!")
     print("What would you like to do?")
@@ -125,18 +125,18 @@ def character_main(player):
     print("3. Logout")
     choice = input("Choice: ")
     if choice == "1":
-        play(player)
+        play(user)
     elif choice == "2":
-        character_manager(player)
+        character_manager(user)
     elif choice == "3":
-        player.logout()
+        user.logout()
         #account_main() Might need to re-add this??
     else:
         print("Invalid choice")
-        character_main(player)
+        character_main(user)
 
-def character_manager(player):
-    username = player.username
+def character_manager(user):
+    username = user.username
     clear()
     print("This is the character manager")
     print("What would you like to do?")
@@ -146,24 +146,25 @@ def character_manager(player):
     print("4. Go back")
     choice = input("Choice: ")
     if choice == "1":
-        create_character(username)
+        create_character(user)
     elif choice == "2":
-        delete_character(username)
+        delete_character(user)
     elif choice == "3":
-        view_characters(username)
+        view_characters(user)
     elif choice == "4":
-        character_main(player)
+        character_main(user)
     else:
         print("Invalid choice")
-        character_manager(username)
+        character_manager(user)
 
-def create_character(username):
+def create_character(user):
+    username = user.username
     clear()
     if not is_initialized(username):
         initialize(username)
     if len(load_characters()[username]) >= 5:
         print("You already have 5 characters, delete one to create a new one")
-        character_manager(username)
+        character_manager(user)
     else:
         print("Choose a profession")
         print("1. Dragoon")
@@ -191,10 +192,10 @@ def create_character(username):
             case "7":
                 character = Seraph()
             case "8":
-                character_manager(username)
+                character_manager(user)
             case _:
                 print("Invalid choice")
-                create_character(username)
+                create_character(user)
         if choice.isnumeric() and 1 <= int(choice) and int(choice) <= 7:
             name_good = False
             error = []
@@ -209,7 +210,7 @@ def create_character(username):
                 if not check_name(name):
                     error = ["Invalid name"]
                 elif character_name_taken(username, name):
-                    error = ["That name is already taken", "Please choose a name different than " + get_characters_name(username)]
+                    error = ["That name is already taken", "Please choose a name different than " + get_characters_name(user)]
                 else:
                     name_good = True
             character.name = name
@@ -219,15 +220,16 @@ def create_character(username):
             print("Your character has been created!")
             print("Enter anything to go back")
             input()
-            character_manager(username)
+            character_manager(user)
 
-def delete_character(username):
+def delete_character(user):
+    username = user.username
     clear()
     if not owns_character(username):
         print("You don't have any characters yet!")
         print("Enter anything to go back")
         input()
-        character_manager(username)
+        character_manager(user)
     else:
         answers = dict()
         print("Select a character to delete")
@@ -239,7 +241,7 @@ def delete_character(username):
         choice = input("Choice: ")
         if choice.isnumeric() and 1 <= int(choice) and int(choice) <= len(characters)+1:
             if choice == str(len(characters)+1):
-                character_manager(username)
+                character_manager(user)
             else:
                 clear()
                 print("Are you sure you want to delete", answers[choice], "?")
@@ -255,24 +257,25 @@ def delete_character(username):
                         print("The character", answers[choice], "has been deleted")
                         print("Enter anything to go back")
                         input()
-                        character_manager(username)
+                        character_manager(user)
                     elif choice_validation == "2":
                         choice_valid = True
                         print("The deletion of", answers[choice], "has been cancelled")
                         print("Enter anything to go back")
                         input()
-                        character_manager(username)
+                        character_manager(user)
                     else:
                         print("Invalid choice")
-                        delete_character(username)
+                        delete_character(user)
 
-def view_characters(username):
+def view_characters(user):
+    username = user.username
     if not owns_character(username):
         clear()
         print("You don't have any characters yet!")
         print("Enter anything to go back")
         input()
-        character_manager(username)
+        character_manager(user)
     else:
         clear()
         print("Select a character to view")
@@ -283,24 +286,24 @@ def view_characters(username):
         choice = input("Choice: ")
         if choice.isnumeric() and 1 <= int(choice) and int(choice) <= len(characters)+1:
             if choice == str(len(characters)+1):
-                character_manager(username)
+                character_manager(user)
             else:
                 view_character(username, list(characters.keys())[int(choice)-1])
                 print("Enter anything to go back")
                 input()
-                character_manager(username)
+                character_manager(user)
 
 def play(*args):
     if len(args) == 1:
-        player = args[0]
-        username = player.username
+        user = args[0]
+        username = user.username
         clear()
         if not owns_character(username):
             clear()
             print("You don't have any characters yet!")
             print("Enter anything to go back")
             input()
-            character_main(player)
+            character_main(user)
         else:
             print("Select a character to play with")
             characters = load_characters()[username]
@@ -310,19 +313,19 @@ def play(*args):
             choice = input("Choice: ")
             if choice.isnumeric() and 1 <= int(choice) and int(choice) <= len(characters)+1:
                 if choice == str(len(characters)+1):
-                    character_main(player)
+                    character_main(user)
                 else:
                     print("You are now playing with", list(characters.keys())[int(choice)-1])
-                    play(username, list(characters.keys())[int(choice)-1])
+                    play(user, list(characters.keys())[int(choice)-1])
     elif len(args) == 2:
-        player = args[0]
-        username = player.username
+        user = args[0]
+        username = user.username
         character_name = args[1]
         print("Welcome to Python RPG", username, "!")
         print("You are playing with", character_name)
         print("Not yet implemented")
         import time
         time.sleep(5)
-        character_main(player)
+        character_main(user)
     else:
         raise Exception("Invalid number of arguments")
