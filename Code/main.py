@@ -14,3 +14,4 @@ while True:
     if username:
         player.login(username)
         character_main(player)
+        break

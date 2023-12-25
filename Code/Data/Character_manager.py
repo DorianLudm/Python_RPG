@@ -133,7 +133,7 @@ def character_main(player):
         #account_main() Might need to re-add this??
     else:
         print("Invalid choice")
-        character_main()
+        character_main(player)
 
 def character_manager(player):
     username = player.username
@@ -300,7 +300,7 @@ def play(*args):
             print("You don't have any characters yet!")
             print("Enter anything to go back")
             input()
-            character_main(username)
+            character_main(player)
         else:
             print("Select a character to play with")
             characters = load_characters()[username]
@@ -310,19 +310,19 @@ def play(*args):
             choice = input("Choice: ")
             if choice.isnumeric() and 1 <= int(choice) and int(choice) <= len(characters)+1:
                 if choice == str(len(characters)+1):
-                    character_main(username)
+                    character_main(player)
                 else:
                     print("You are now playing with", list(characters.keys())[int(choice)-1])
                     play(username, list(characters.keys())[int(choice)-1])
     elif len(args) == 2:
-        Player = args[0]
-        username = Player.username
+        player = args[0]
+        username = player.username
         character_name = args[1]
         print("Welcome to Python RPG", username, "!")
         print("You are playing with", character_name)
         print("Not yet implemented")
         import time
         time.sleep(5)
-        character_main(username)
+        character_main(player)
     else:
         raise Exception("Invalid number of arguments")
