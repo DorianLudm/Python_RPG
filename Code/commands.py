@@ -1,4 +1,8 @@
 import os
+import platform
 
 def clear():
-    os.system('cls')
+    if platform.system() == "Windows":
+        os.system('cls')
+    elif platform.system() == "Linux":
+        os.system('clear')
