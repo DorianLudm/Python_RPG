@@ -7,11 +7,17 @@ from User import User
 from Account_manager import account_main
 from Character_manager import character_main
 
+from ORM_connector import engine, session
+
 user = User()
-# Add if here
 while True:
     username = account_main()
     if username:
-        user.login(username)
+        try:
+            loaded = user.load(username)
+        except ValueError as e:
+            print("An error occured: ", e)
+            print("No idea what happened, restarting...")
+            break
         character_main(user)
         break

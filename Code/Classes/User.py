@@ -1,31 +1,32 @@
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from Character import Character
-from typing import List
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
 
-Base = DeclarativeBase()
+import sys
+sys.path.append("..")
+from ORM_connector import session, Base
 
 class User(Base):
-    __tablename__ = "users"
-    idU: Mapped[int] = mapped_column(int, primary_key=True)
-    username: Mapped[str] = mapped_column(str)
-    salt: Mapped[str] = mapped_column(str)
-    hashed_password: Mapped[str] = mapped_column(str)
-    characters: Mapped[List["Character"]] = relationship("Character", back_populates="user")
-    
-    def __init__(self, username, salt, hashed_password):
-        self.logined = False
-        self.username = username
-        self.salt = salt
-        self.hashed_password = hashed_password
-    
-    # To update
-    def login(self, username):
-        self.logined = True
-        self.username = username
-    
-    def logout(self):
-        self.logined = False
-        self.username = None
+    __tablename__ = 'users'
 
-    def __repr__(self) -> str:
-        return f'User({self.username}, {self.logined})'
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True)
+    password = Column(String)
+
+    characters = relationship('Character', back_populates='user')
+    
+    def __init__(self):
+        self.id = None
+        self.username = None
+        self.password = None
+        
+    def load(self, username):
+        from Character import Character
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            self.id = user.id
+            self.username = user.username
+            self.password = user.password
+            self.characters = user.characters
+        else:
+            raise ValueError(f"No user found with username {username}")

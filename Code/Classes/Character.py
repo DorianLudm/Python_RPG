@@ -1,21 +1,23 @@
 import random
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from User import User
 
-Base = DeclarativeBase()
+import sys
+sys.path.append("..")
+from ORM_connector import session, Base
 
 class Character(Base):
-    __tablename__ = "characters"
-    idC: Mapped[int] = mapped_column(int, primary_key=True)
-    name: Mapped[str] = mapped_column(str)
-    profession: Mapped[str] = mapped_column(str)
-    strength: Mapped[int] = mapped_column(int)
-    dexterity: Mapped[int] = mapped_column(int)
-    defense: Mapped[int] = mapped_column(int)
-    magic: Mapped[int] = mapped_column(int)
-    holiness: Mapped[int] = mapped_column(int)
-    charisma: Mapped[int] = mapped_column(int)
-    speed: Mapped[int] = mapped_column(int)
+    __tablename__ = 'characters'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    profession = Column(String)
+    skill_points = relationship('SkillPoints', uselist=False, back_populates='character')
+
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship('User', back_populates='characters')
     
     def __init__(self, prof = "None", skill_points = [0 for i in range(7)]):
         self.skill_points = dict()
@@ -77,3 +79,71 @@ class Slaughterer(Character):
 class Spellcaster(Character):
     def __init__(self):
         super().__init__("Spellcaster", [3, 5, 1, 9, 2, 1, 4])
+        
+class SkillPoints(Base):
+    __tablename__ = 'skill_points'
+
+    id = Column(Integer, primary_key=True)
+    base_strength = Column(Integer)
+    base_dexterity = Column(Integer)
+    base_defense = Column(Integer)
+    base_magic = Column(Integer)
+    base_holiness = Column(Integer)
+    base_charisma = Column(Integer)
+    base_speed = Column(Integer)
+
+    bonus_strength = Column(Integer)
+    bonus_dexterity = Column(Integer)
+    bonus_defense = Column(Integer)
+    bonus_magic = Column(Integer)
+    bonus_holiness = Column(Integer)
+    bonus_charisma = Column(Integer)
+    bonus_speed = Column(Integer)
+
+    character_id = Column(Integer, ForeignKey('characters.id'))
+    character = relationship('Character', back_populates='skill_points')
+
+    @property
+    def total_strength(self):
+        return self.base_strength + self.bonus_strength
+    
+    @property
+    def total_dexterity(self):
+        return self.base_dexterity + self.bonus_dexterity
+    
+    @property
+    def total_defense(self):
+        return self.base_defense + self.bonus_defense
+    
+    @property
+    def total_magic(self):
+        return self.base_magic + self.bonus_magic
+    
+    @property
+    def total_holiness(self):
+        return self.base_holiness + self.bonus_holiness
+    
+    @property
+    def total_charisma(self):
+        return self.base_charisma + self.bonus_charisma
+    
+    @property
+    def total_speed(self):
+        return self.base_speed + self.bonus_speed
+    
+    def __init__(self, base_sp):
+        self.base_strength = base_sp[0]
+        self.base_dexterity = base_sp[1]
+        self.base_defense = base_sp[2]
+        self.base_magic = base_sp[3]
+        self.base_holiness = base_sp[4]
+        self.base_charisma = base_sp[5]
+        self.base_speed = base_sp[6]
+
+        self.bonus_strength = 0
+        self.bonus_dexterity = 0
+        self.bonus_defense = 0
+        self.bonus_magic = 0
+        self.bonus_holiness = 0
+        self.bonus_charisma = 0
+        self.bonus_speed = 0
